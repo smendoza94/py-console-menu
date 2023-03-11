@@ -1,0 +1,5 @@
+# ignore upload of .prettierignore
+*.prettierignore
+
+# ignore upload of py cache
+/__pycache__
