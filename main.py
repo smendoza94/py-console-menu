@@ -72,6 +72,8 @@ if __name__ == "__main__":
       break
     elif opt == 'L':
       list_helper(list_menu, restaurant_menu_list, spicy_scale_map)
+    elif opt == 'A':
+      add_helper(restaurant_menu_list, spicy_scale_map)
     else:
       # check of the character stored in opt is in the_menu dictionary then
       # provide feedback of the option selection and if its valid option

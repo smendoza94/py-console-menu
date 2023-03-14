@@ -7,6 +7,7 @@ def print_main_menu(menu_options):
     print(f" {i} - {menu_options[i]} ")
   print("=======================")
 
+######## PART 3 ########
 def list_helper(list_menu, restaurant_menu_list, spicy_scale_map):
   if len(restaurant_menu_list) == 0:
     print("WARNING: There is nothing to display!")
@@ -72,22 +73,82 @@ def print_restaurant_menu(restaurant_menu, spicy_scale_map, name_only=False, sho
 
   print('------------------------------------------')
   # Go through the dishes in the restaurant menu:
-  for i in restaurant_menu: 
+  for dish in restaurant_menu: 
     # if vegetarian_only is True and the dish is not vegetarian, skip this iteration
-    if vegetarian_only and i["is_vegetarian"] == "no":
+    if vegetarian_only and dish["is_vegetarian"] == "no":
       continue
 
     # if the index of the task needs to be displayed (show_idx is True), print dish index only
-    food_name = i["name"].upper()
+    food_name = dish["name"].upper()
     if show_idx == True:
-      print(f"{restaurant_menu.index(i)+1}. {food_name}")
+      print(f"{restaurant_menu.index(dish)+1}. {food_name}")
     else:
       # print the name of the dish
       print(f"{food_name}")
     
     # if name_only is False
     if not name_only:
-      print("* Calories: " + str(i["calories"]))
-      print("* Price: " + str(i["price"]))
-      print("* Is it vegetarian: " + str(i["is_vegetarian"]))
-      print("* Spicy level: "+ str(spicy_scale_map[i["spicy_level"]]))
+      print("* Calories: " + str(dish["calories"]))
+      print("* Price: " + str(dish["price"]))
+      print("* Is it vegetarian: " + str(dish["is_vegetarian"]))
+      print("* Spicy level: "+ str(spicy_scale_map[dish["spicy_level"]]))
+
+######## PART 4 ########
+def print_dish(dish, spicy_scale_map, name_only=False):
+  # param: dish (dict) - a dictionary object that is expected to contain the following keys:
+  #   - "dish": dish's name
+  #   - "calories": calories for this dish
+  #   - "price": price of this dish
+  #   - "is_vegetarian": boolean whether this dish is for vegetarian
+  #   - "spicy_level": integer that represents the level of spiciness
+  # param: spicy_scale_map (dict) - a dictionary object that is expected to have the integer keys that 
+  #   correspond to the "level of spiciness" values for each corresponding key are string description 
+  #   of the level of spiciness
+  # param: name_only (Boolean) - by default, set to False. If True, then only the name of the dish is 
+  #   printed. Otherwise, displays the formatted restaurant menues.
+  # returns: None; only prints the restaurant menu item.
+  if name_only == True:
+    print(str(dish['name'].upper()))
+  else:
+    print(str(dish['name'].upper()))
+    print("* Calories: " + str(dish["calories"]))
+    print("* Price: " + str(dish["price"]))
+    print("* Is it vegetarian: " + str(dish["is_vegetarian"]))
+    print("* Spicy level: "+ str(spicy_scale_map[dish["spicy_level"]]))
+
+def get_new_menu_dish(dish_values, spicy_scale_map):
+  # param: dish_values is a list [] and returns a dict with correct keys
+  return {
+    'name': dish_values[0],
+    'calories': int(dish_values[1]),
+    'price': float(dish_values[2]),
+    'is_vegetarian': dish_values[3],
+    'spicy_level': int(dish_values[4])
+  }
+
+def add_helper(restaurant_menu_list, spicy_scale_map):
+  continue_action = 'y'
+  while continue_action == 'y':
+    print("::: Enter each required field, separated by commas.")
+      # * `name` : name of the dish
+      # * `calories`: number of calories per serving
+      # * `price` : price of the item
+      # * `is_vegetarian` : if the item is vegetarian
+      # * `spicy_level` : 1 - 4
+    print("::: name of the dish, calories, price, is it vegetarian ( yes | no ), spicy_level ( 1 - 4 )")
+    dish_data = input("> ")  # get and process the user input deliniated by "," data string into a list
+    dish_values = dish_data.split(",")
+    result_dict = get_new_menu_dish(dish_values, spicy_scale_map) # create a new dish (dict) for the menu
+    if type(result_dict) == dict:
+      restaurant_menu_list.append(result_dict)  # add the new dish to the list of dish menus
+      print(f"Successfully added a new dish!")
+      print_dish(result_dict, spicy_scale_map)
+    elif type(result_dict) == int:
+      print(f"WARNING: invalid number of fields!")
+      print(f"You provided {result_dict}, instead of the expected 5.\n")
+    else:
+      print(f"WARNING: invalid dish field: {result_dict}\n")
+
+    print("::: Would you like to add another dish?", end=" ")
+    continue_action = input("Enter 'y' to continue.\n> ")
+    continue_action = continue_action.lower()
